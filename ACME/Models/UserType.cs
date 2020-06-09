@@ -1,7 +1,11 @@
-﻿namespace ACME.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ACME.Models
 {
-    public enum UserType {
-    EMPLOYEE,
-    CUSTOMER
+    public class UserType
+    {
+        [Key]
+        public int UserTypeID { get; set; }
+        public string Name{ get; set; }
     }
 }

@@ -1,0 +1,18 @@
+﻿@{
+    ViewBag.Title = "Login";
+}
+<div id="login-page">
+
+    <div class="login-wrapper">
+        <h3>Login</h3>
+        <form action="/user/login" method="post">
+            <input type="text" name="email" placeholder="Email" class="fluid-form-control rounded-textfield" />
+            <input type="password" name="password" placeholder="Password" class="fluid-form-control rounded-textfield" />
+            <div class="login-button-text-wrapper">
+                <button class="custom-primary-button">Login</button>
+                <a href="/user/register">Don't have an account yet? Register for free!</a>
+            </div>
+        </form>
+    </div>
+
+</div>

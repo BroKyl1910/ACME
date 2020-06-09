@@ -92,7 +92,8 @@ body {
 }
 
 body {
-    background-color: #dae1e7;
+    /*    background-color: #dae1e7;*/
+    background-color: #eaf5ff;
 }
 
 .navbar-section {
@@ -102,39 +103,72 @@ body {
     text-align: center;
 }
 
-a.navbar-brand-name {
-    font-size: 1.5em;
-}
 
 a.nav-item {
     color: rgba(255,255,255,1);
+    margin-left: 20px;
 }
 
     a.nav-item:hover {
         text-decoration: none;
     }
 
-.hr{
+a.navbar-brand-name {
+    font-size: 1.5em;
+    margin-left: 0px;
+}
+
+.hr {
     width: 100%;
     border-top: 1px solid rgba(255,255,255,0.1);
 }
 
-/********************* LOGIN STYLES ******************************/
-#login-page .fluid-form-control {
+.fluid-form-control {
     display: block;
     width: 100%;
 }
 
-#login-page .rounded-textfield {
+.rounded-textfield {
     border-radius: 10px;
     margin-bottom: 15px;
     padding: 10px;
     border: none;
 }
 
-    #login-page .rounded-textfield:focus {
+
+    .rounded-textfield:focus {
         outline: none;
     }
+
+.custom-primary-button {
+    background: #142850;
+    color: white;
+    border-radius: 10px;
+    border: none;
+    padding: 10px 20px;
+    margin-right: 10px;
+    box-shadow: 2px 2px 1px rgba(0,0,0,0.1);
+}
+
+.custom-primary-button:focus {
+    outline: none;
+}
+
+.my-custom-select{
+    border-radius: 10px;
+    border: none;
+    padding: 10px;
+}
+
+.my-custom-select:focus{
+    outline: none;
+}
+
+.my-custom-option{
+    padding: 10px;
+}
+
+/********************* LOGIN STYLES ******************************/
 
 #login-page .login-wrapper {
     width: 60%;
@@ -142,7 +176,7 @@ a.nav-item {
     margin: 50px auto;
     background: #27496d;
     border-radius: 20px;
-    box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+    box-shadow: 6px 6px 6px rgba(0,0,0,0.5);
 }
 
     #login-page .login-wrapper h3 {
@@ -158,24 +192,41 @@ a.nav-item {
         align-items: center;
     }
 
-        #login-page .login-wrapper .login-button-text-wrapper .custom-button {
-            background: #142850;
+        #login-page .login-wrapper .login-button-text-wrapper a {
             color: white;
-            border-radius: 10px;
-            border: none;
-            padding: 10px 20px;
-            margin-right: 10px;
-            box-shadow: 2px 2px 1px rgba(0,0,0,0.1);
         }
 
-            #login-page .login-wrapper .login-button-text-wrapper .custom-button:focus{
-                outline: none;
+            #login-page .login-wrapper .login-button-text-wrapper a:hover {
+                text-decoration: underline;
             }
 
-            #login-page .login-wrapper .login-button-text-wrapper a {
-                color: white;
-            }
+/********************* REGISTER STYLES ******************************/
+#register-page .register-wrapper {
+    width: 60%;
+    padding: 30px;
+    margin: 50px auto;
+    background: #27496d;
+    border-radius: 20px;
+    box-shadow: 6px 6px 6px rgba(0,0,0,0.5);
+}
 
-        #login-page .login-wrapper .login-button-text-wrapper a:hover {
-            text-decoration: underline;
+    #register-page .register-wrapper h3 {
+        color: white;
+        margin-bottom: 30px;
+    }
+
+    #register-page .register-wrapper .register-button-text-wrapper {
+        margin-top: 30px;
+        display: flex;
+        flex-direction: row;
+        justify-items: flex-end;
+        align-items: center;
+    }
+
+        #register-page .register-wrapper .register-button-text-wrapper a {
+            color: white;
         }
+
+            #register-page .register-wrapper .register-button-text-wrapper a:hover {
+                text-decoration: underline;
+            }

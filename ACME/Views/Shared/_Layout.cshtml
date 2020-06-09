@@ -15,7 +15,17 @@
                 @*<a class="nav-item" href="/home">Home</a>*@
             </div>
             <div class="navbar-section">
-                <a class="nav-item" href="/login">Login</a>
+                @using Microsoft.AspNetCore.Http
+                @inject IHttpContextAccessor HttpContextAccessor
+                @if (HttpContextAccessor.HttpContext.Session.GetString("Email") != null)
+                {
+                    <a asp-area="" asp-controller="Home" asp-action="Index" class="nav-item">Home</a>
+                    <a asp-area="" asp-controller="User" asp-action="Logout" class="nav-item">Log Out - @HttpContextAccessor.HttpContext.Session.GetString("Name")</a>
+                }
+                else
+                {
+                    <a asp-area="" asp-controller="User" asp-action="Login" class="nav-item">Log In</a>
+                }
             </div>
         </nav>
     </header>

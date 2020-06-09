@@ -8,7 +8,6 @@ namespace ACME.Models
     {
         [Key]
         public int OrderID { get; set; }
-        public List<OrderItem> Items{ get; set; }
         public string ShippingAddress { get; set; }
         public string ContactNumber { get; set; }
         public OrderStatus OrderStatus { get; set; }
