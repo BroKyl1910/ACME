@@ -1,0 +1,118 @@
+﻿@model ACME.Models.Product
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="body-content">
+    <h1 class="title">Add Product</h1>
+    <div class="dark-hr"></div>
+
+    <div class="card-wrapper">
+        <div class="create-card">
+            <div class="custom-container">
+                <div class="custom-card-header">
+                    <h2>Product Image</h2>
+                    <div class="header-controls">
+                        @Html.AntiForgeryToken()
+                        <input type="file" name="file" id="file" class="inputfile" accept="image/*" />
+                        <label for="file" class="upload-label"><i class="material-icons image-add-icon">add_box</i><i class="material-icons image-edit-icon">edit</i></label>
+                    </div>
+
+                </div>
+                <div class="dark-hr"></div>
+                <div class="image-container">
+                    <label class="no-image-text">No image selected</label>
+                    <img src="https://thumbs.nosto.com/quick/magento-656ad115/8/127590/4d146173c04614389a07a211bfd96b73c7851413eb452c96a7843865d25ac57ea/A" alt="" class="upload-img">
+                </div>
+            </div>
+        </div>
+
+        <div class="create-card details-card">
+            <div class="custom-container">
+                <div class="custom-card-header">
+                    <h2>Product Details</h2>
+                </div>
+                <div class="dark-hr"></div>
+
+                <div class="form-control-container">
+                    <input type="text" asp-for="Name" id="prod-name" placeholder="Product Name" class="form-input" maxlength="100">
+                    <input asp-for="Price" id="prod-price" placeholder="Product Price" class="form-input">
+                    <textarea asp-for="Description" id="prod-desc" placeholder="Product Description" class="form-input" maxlength="200"></textarea>
+                    <span class="text-danger error-text"></span>
+
+                </div>
+                <div class="form-button-container">
+                    <input id="submit-btn" type="button" class="form-button" value="Save Product">
+                    <a asp-action="Index" class="back-button">Back</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+<script>
+    $(".image-add-icon").css("display", "block");
+    $(".image-edit-icon").css("display", "none");
+
+    //Display picture update
+    $("#file").change(function (e) {
+        var file = e.originalEvent.srcElement.files[0];
+
+        var img = $(".upload-img");
+        var reader = new FileReader();
+        reader.onloadend = function () {
+            $(img).attr("src", reader.result);
+        };
+        reader.readAsDataURL(file);
+
+        $(".no-image-text").css("display", "none");
+        $(".upload-img").css("display", "block");
+
+        $(".image-add-icon").css("display", "none");
+        $(".image-edit-icon").css("display", "block");
+    });
+
+    //Submit data from file picker and form
+    $('#submit-btn').click((e) => {
+        var formData = new FormData();
+        formData.append("__RequestVerificationToken", $('input[name="__RequestVerificationToken"]').val());
+        formData.append("Name", $('#prod-name').val());
+        formData.append("Price", $('#prod-price').val().replace('.',','));
+        formData.append("Description", $('#prod-desc').val());
+        formData.append("ProductImage", $('#file')[0].files[0]);
+        /*Editing = false used to determine whether an image is required or not because if the user is editing,
+          there will already be an image assigned to the product*/
+        formData.append("Editing", false);
+
+        var validationRequest = new XMLHttpRequest();
+        //Submit for validation
+        validationRequest.open("POST", "/Products/Validate");
+        validationRequest.onreadystatechange = () => {
+            //Valid, so submit to /Products/Create then redirect
+            if (validationRequest.readyState === 4 && validationRequest.status === 200 && validationRequest.response == "OK") {
+                $('.error-text').text("");
+                var createRequest = new XMLHttpRequest();
+                createRequest.open("POST", "/Products/Create");
+                //When new product has been posted, redirect to index
+                createRequest.onreadystatechange = () => {
+                    if (validationRequest.readyState === 4 && validationRequest.status === 200 && validationRequest.response == "OK") {
+                        window.location.replace("/Products/Index");
+                    }
+                }
+                createRequest.send(formData);
+            }
+            //Not valid, display validation errors
+            else {
+                $('.error-text').text(validationRequest.response);
+            }
+        }
+        //Send request
+        validationRequest.send(formData);
+    });
+</script>
