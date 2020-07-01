@@ -1,6 +1,8 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+
 a.navbar-brand {
     white-space: normal;
     text-align: center;
@@ -230,3 +232,441 @@ a.navbar-brand-name {
             #register-page .register-wrapper .register-button-text-wrapper a:hover {
                 text-decoration: underline;
             }
+
+
+/********************* PRODUCTS STYLES ******************************/
+
+.body-content {
+    padding: 30px;
+    padding-bottom: 300px;
+}
+/* Carousel */
+.carousel-caption p {
+    font-size: 20px;
+    line-height: 1.4;
+}
+
+/* Make .svg files in the carousel display properly in older browsers */
+.carousel-inner .item img[src$=".svg"] {
+    width: 100%;
+}
+
+/* QR code generator */
+#qrCode {
+    margin: 15px;
+}
+
+* {
+    font-family: "Montserrat";
+}
+
+    *::-webkit-scrollbar {
+        width: 5px;
+        border-radius: 50%;
+    }
+
+    *::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.51);
+        box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.51);
+    }
+
+    *::-webkit-scrollbar-thumb {
+        background-color: darkgrey;
+        outline: 1px solid slategrey;
+    }
+
+.main-wrapper {
+    padding-left: 10px;
+}
+
+.dark-hr {
+    margin-top: 0;
+    margin-bottom: 10px;
+    height: 0;
+    width: 100%;
+    border-top: 1px solid rgba(0,0,0,0.9);
+}
+
+.another-wrapper {
+    width: 70%;
+    margin: 0 auto;
+}
+
+.no-products-text {
+    font-size: 1.4em;
+    margin: 20px;
+}
+
+.card-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.custom-card {
+    margin: 15px;
+    background: rgba(255,255,255,0.95);
+    border-radius: 5px;
+    border: 1px solid rgba(0,0,0,0.2);
+    box-shadow: 2px 2px 15px 0px rgba(0,0,0,0.75);
+    padding: 20px;
+    flex-basis: 20%;
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+.product-card {
+    align-self: flex-start;
+    flex-shrink: 0;
+    min-width: 150px;
+}
+
+    .product-card:hover {
+        cursor: pointer;
+        border: 1px solid rgba(0,0,0,0.5);
+        box-shadow: 2px 2px 15px 0px rgba(0,0,0,1);
+    }
+
+.desc-wrapper {
+    display: none;
+    margin-top: 10px;
+    padding-top: 10px;
+    width: 100%;
+    border-top: 1px solid rgba(0,0,0,0.2);
+    transition: display 2s ease;
+    z-index: 100;
+}
+
+.card-desc {
+    margin: 0 10px;
+    font-size: 1em;
+}
+
+
+.create-card {
+    margin: 15px;
+    background: rgba(255,255,255,0.9);
+    border-radius: 5px;
+    border: 1px solid rgba(0,0,0,0.2);
+    box-shadow: 2px 2px 15px 0px rgba(0,0,0,0.75);
+    padding: 20px;
+    flex-basis: 40%;
+}
+
+
+.custom-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    height: 100%;
+}
+
+.card-img {
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.custom-card-title {
+    margin-top: 10px;
+    font-weight: bold;
+    font-size: 1.2em;
+    max-width: 100%;
+}
+
+.custom-card-title-short {
+    height: 3.0em;
+    overflow: hidden;
+}
+
+.custom-card-title-full {
+    display: none;
+}
+
+.card-price {
+    margin-top: 20px;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+.card-link {
+    margin-top: 15px;
+    padding: 5px;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    width: 100%;
+    border-radius: 5px;
+    background: rgba(0,123,255,0.8);
+    text-align: center;
+}
+
+
+    .card-link:hover {
+        background: rgba(0,123,255,1);
+    }
+
+.options-wrapper {
+    display: flex;
+    width: 100%;
+    margin-bottom: 15px;
+    flex-direction: row-reverse;
+}
+
+.material-icons {
+    font-size: 1.5em;
+    color: rgba(0,0,0,0.5);
+}
+
+    .material-icons:hover {
+        color: rgba(0,0,0,0.8);
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+.edit-icon {
+    margin-right: 5px;
+}
+
+.big-icon {
+    font-size: 2.0em;
+}
+
+.custom-card-header {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+    .inputfile + .upload-label {
+        font-size: 1.25em;
+        font-weight: 700;
+        display: inline-block;
+    }
+
+.upload-label {
+    /*   background-color: rgba(0,0,0,0.5); */
+    color: white;
+}
+
+.inputfile:focus + .upload-label,
+.inputfile + .upload-label:hover {
+    /*     background: rgba(0,0,0,0.8); */
+    cursor: pointer;
+}
+
+.inputfile:focus + .upload-label {
+    outline: 1px dotted #000;
+    outline: -webkit-focus-ring-color auto 5px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 5px;
+    border-radius: none;
+    border: none;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    font-size: 1.2em;
+    margin-top: 20px;
+    resize: none;
+}
+
+.error-text {
+    margin-top: 10px;
+}
+
+.image-container {
+    height: 300px;
+    width: 500px;
+    margin: 10px auto;
+    text-align: center;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 5px;
+}
+
+.index-image-container {
+    height: 200px;
+    width: 100%;
+    margin: 10px auto;
+    text-align: center;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 5px;
+}
+
+.card-product-info {
+    display: flex;
+    flex-direction: column;
+    /*min-height:50%;*/
+}
+
+.image-edit-icon {
+    display: none;
+}
+
+.image-delete-icon {
+    font-size: 30px;
+    display: none;
+}
+
+.no-image-text {
+    align-self: center;
+    display: block;
+}
+
+.upload-img {
+    display: none;
+    max-height: 300px;
+    max-width: 500px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
+}
+
+.form-control-container {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    height: 70%;
+}
+
+.form-button-container {
+    display: flex;
+    flex-direction: row-reverse;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.form-button {
+    padding: 5px 10px;
+    background: rgba(0, 123, 255, 0.8);
+    border: none;
+    color: white;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 1.2em;
+    cursor: pointer;
+}
+
+    .form-button:hover {
+        background: rgba(0, 123, 255, 1);
+    }
+
+.back-button {
+    padding: 5px 10px;
+    background: transparent;
+    border: none;
+    color: black;
+    border-radius: 5px;
+    font-size: 1.2em;
+    cursor: pointer;
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+    .back-button:hover {
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+.header-controls {
+    display: flex;
+    flex-direction: row;
+    font-weight: 700;
+    align-items: center;
+}
+
+.home-search-bar {
+    margin-top: 0;
+    margin-right: 20px;
+    width: 400px;
+    font-size: 1.2em;
+    background: rgba(0,0,0,0);
+}
+
+form {
+    width: 100%;
+    height: 100%;
+}
+
+#popup-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 98;
+    background-color: rgba(0,0,0,0.5);
+}
+
+#delete-form-wrapper {
+    display: none;
+    background-color: rgba(0,0,0,0.95);
+    border-radius: 5px;
+    padding: 30px;
+    margin-top: 20px;
+    position: absolute;
+    overflow-y: auto;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    -webkit-transform: translate(-50%,-50%);
+    width: 60%;
+    color: white;
+}
+
+.delete-confirm-button {
+    background-color: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    margin: 15px;
+    padding: 10px 30px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+    .delete-confirm-button:hover {
+        background-color: rgba(255,255,255,0.4);
+        box-shadow: 1px 1px 1px rgba(255,255,255,0.2);
+    }
+
+.delete-button-group {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+
+@media (max-width: 1187px) {
+
+    .card {
+        flex-basis: 25%;
+    }
+}
+
+@media (max-width: 975px) {
+
+    .card {
+        flex-basis: 40%;
+    }
+}
+
+@media (max-width: 600px) {
+    .card {
+        flex-basis: 60%;
+    }
+}

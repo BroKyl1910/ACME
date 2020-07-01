@@ -20,7 +20,7 @@ namespace ACME.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return RedirectToAction("Index", "Products");
         }
 
         public IActionResult Privacy()

@@ -1,0 +1,194 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@using ACME.Models;
+
+@model IEnumerable<ACME.Models.Product>
+
+@{
+    ViewData["Title"] = "Products";
+}
+
+<div class="body-content">
+
+
+    <div class="main-wrapper">
+        <div class="custom-card-header">
+            <h1 class="title">Products</h1>
+            <div class="header-controls">
+                <form action="/Products/Index" method="GET">
+                    <input class="home-search-bar form-input" type="text" name="q" value="" placeholder="Search..." />
+                </form>
+
+                <a asp-controller="Products" asp-action="Create" class="material-icons big-icon">add_box</a>
+            </div>
+
+        </div>
+        <div class="dark-hr"></div>
+        @if (Model.Count() == 0)
+        {
+            <div class="no-products-text">No products found</div>
+        }
+        else
+        {
+            <div class="card-wrapper">
+                @foreach (Product product in Model)
+                {
+                    <div class="custom-card product-card">
+                        <div class="custom-container">
+                            <div class="options-wrapper">
+                                <i class="material-icons delete-icon" id="@product.ProductCode">delete</i>
+                                <a asp-action="Edit" asp-route-id="@product.ProductCode"><i class="material-icons edit-icon">edit</i></a>
+                            </div>
+                            <div class="index-image-container">
+                                <img class="card-img" src="data:image/jpeg;base64,@Convert.ToBase64String(product.Image)" />
+                            </div>
+                            <div class="card-product-info">
+                                @if (product.Name.Length > 25)
+                                {
+                                    <div class="custom-card-title custom-card-title-short">@product.Name.Substring(0, 25) ...</div>
+                                    <div class="custom-card-title custom-card-title-full">@product.Name</div>
+                                }
+                                else
+                                {
+                                    <div class="custom-card-title custom-card-title-short">@product.Name</div>
+                                }
+                                <span class="card-price">R @string.Format("{0:0.00}", (decimal)product.Price)</span>
+                                <div class="desc-wrapper">
+                                    <div class="card-desc">@product.Descripion</div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+            </div>
+        }
+
+    </div>
+
+    <div id="popup-container">
+        <div id="delete-form-wrapper" class="rounded-container form-wrapper">
+            <h1>Confirm Delete</h1>
+            <hr>
+            <p style="color:white;">Are you sure you want to delete this product?</p>
+            <div class="control-group pull-right delete-button-group">
+                <input class="delete-confirm-button" id="delete-no-button" type="button" value="No">
+                <input class="delete-confirm-button" id="delete-yes-button" type="button" value="Yes">
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    //Reference height used to determine negative padding
+    var referenceHeight;
+    $(window).on('load', () => {
+        console.log("loaded");
+        var firstCard = $('.product-card')[0];
+        referenceHeight = $(firstCard).height();
+        console.log(referenceHeight);
+
+    });
+
+    var idToDelete = null;
+    //Delete button pressed
+    $('.delete-icon').on('click', (evt) => {
+        idToDelete = Number(evt.currentTarget.id);
+        $('#popup-container').fadeIn();
+        $('#delete-form-wrapper').show();
+        $('#add-form-wrapper').hide();
+    });
+
+    //Delete cancelled
+    $('#delete-no-button').on('click', () => {
+        $('#popup-container').fadeOut();
+        idToDelete = null;
+    });
+
+    //Delete confirmed
+    $('#delete-yes-button').on('click', () => {
+        $('#popup-container').fadeOut(400, () => {
+            //window.location.replace('/Products/Delete/?id=' + idToDelete);
+            $.ajax({
+                method: "POST",
+                url: '/Products/Delete/?id=' + idToDelete,
+                success: () => {
+                    window.location.replace('/Products/Index');
+                }
+            })
+        });
+    });
+
+    //Close popup if user clicks off
+    $(document).mouseup(function (e) {
+        var container = $(".form-wrapper");
+
+        if (!container.is(e.target) // if the target of the click isn't the container...
+            && container.has(e.target).length === 0) // ... nor a descendant of the container
+        {
+            $('#popup-container').fadeOut();
+            idToDelete = null;
+        }
+    });
+
+    //Expand details on hover
+    $(".product-card").hoverIntent(
+        e => {
+            //Short and long title used to hide short truncated title and show full title
+            var shortTitle = $(e.currentTarget).find(".custom-card-title-short");
+            var fullTitle = $(e.currentTarget).find(".custom-card-title-full");
+            var descWrapper = $(e.currentTarget).find(".desc-wrapper");
+
+            //Make sure that the hovered card description shows above the card underneath
+            $(e.currentTarget).css("position", "relative");
+            $(e.currentTarget).css("z-index", "1");
+
+            //Only change bottom margin if card is not in the last row of 4 to prevent weird glitching
+            var numCardsInLastRow = $('.product-card').length % 4;
+            var newMarginBottom = 10;
+            //Determine negative margin under card
+            if ($('.product-card').index($(e.currentTarget)) < $('.product-card').length - numCardsInLastRow) {
+                newMarginBottom = ($(e.currentTarget).height() + referenceHeight + 20) * - 1;
+            } else {
+                newMarginBottom = (referenceHeight + 20) * - 1;
+            }
+
+            $(e.currentTarget).css("margin-bottom", newMarginBottom + "px");
+
+            $(descWrapper)
+                .stop(true, true)
+                .slideDown(100);
+
+            if (fullTitle.length > 0) {
+                $(shortTitle).hide();
+                $(fullTitle).show();
+            }
+
+        },
+        e => {
+            var descWrapper = $(e.currentTarget).find(".desc-wrapper");
+            var shortTitle = $(e.currentTarget).find(".custom-card-title-short");
+            var fullTitle = $(e.currentTarget).find(".custom-card-title-full");
+
+            if (fullTitle.length > 0) {
+                $(fullTitle).hide();
+                $(shortTitle).show();
+            }
+
+            $(descWrapper)
+                .stop(true, true)
+                .slideUp(100, () => {
+                    $(e.currentTarget)
+                        .css("margin-bottom", "10px")
+                        .css("z-index", "0");
+                });
+        }
+    );
+
+</script>

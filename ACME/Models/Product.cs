@@ -9,6 +9,7 @@ namespace ACME.Models
         public string Name { get; set; }
         public string Descripion { get; set; }
         public double Price { get; set; }
+        public byte[] Image { get; set; }
         public bool Active { get; set; }
     }
 }
