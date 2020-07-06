@@ -95,7 +95,8 @@ body {
 
 body {
     /*    background-color: #dae1e7;*/
-    background-color: #eaf5ff;
+    /*background-color: #eaf5ff;*/
+    background-color: rgba(234,245,255,0.5);
 }
 
 .navbar-section {
@@ -669,4 +670,12 @@ form {
     .card {
         flex-basis: 60%;
     }
+}
+
+/* Details Page */
+.details-body-wrapper{
+    margin: 10% auto;
+    height: 500px;
+    box-shadow: 0px 0px 5px rgba(0,0,0,0.5);
+    background-color: rgb(255,255,255);
 }

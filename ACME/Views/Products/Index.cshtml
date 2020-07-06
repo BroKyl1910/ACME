@@ -16,7 +16,7 @@
 
     <div class="main-wrapper">
         <div class="custom-card-header">
-            <h1 class="title">Products</h1>
+            <h1 class="title">Shop</h1>
             <div class="header-controls">
                 <form action="/Products/Index" method="GET">
                     <input class="home-search-bar form-input" type="text" name="q" value="" placeholder="Search..." />
@@ -36,7 +36,7 @@
             <div class="card-wrapper">
                 @foreach (Product product in Model)
                 {
-                    <div class="custom-card product-card">
+                    <div class="custom-card product-card" data-id="@product.ProductCode">
                         <div class="custom-container">
                             <div class="options-wrapper">
                                 <i class="material-icons delete-icon" id="@product.ProductCode">delete</i>
@@ -56,9 +56,6 @@
                                     <div class="custom-card-title custom-card-title-short">@product.Name</div>
                                 }
                                 <span class="card-price">R @string.Format("{0:0.00}", (decimal)product.Price)</span>
-                                <div class="desc-wrapper">
-                                    <div class="card-desc">@product.Description</div>
-                                </div>
                             </div>
 
                         </div>
@@ -86,14 +83,10 @@
 </div>
 
 <script>
-    //Reference height used to determine negative padding
-    var referenceHeight;
-    $(window).on('load', () => {
-        console.log("loaded");
-        var firstCard = $('.product-card')[0];
-        referenceHeight = $(firstCard).height();
-        console.log(referenceHeight);
 
+    $('.custom-card.product-card').on('click', (evt) => {
+        var id = $(evt.currentTarget).attr('data-id');
+        window.location.replace('Products/Details/' + id);
     });
 
     var idToDelete = null;
@@ -136,59 +129,5 @@
             idToDelete = null;
         }
     });
-
-    //Expand details on hover
-    $(".product-card").hoverIntent(
-        e => {
-            //Short and long title used to hide short truncated title and show full title
-            var shortTitle = $(e.currentTarget).find(".custom-card-title-short");
-            var fullTitle = $(e.currentTarget).find(".custom-card-title-full");
-            var descWrapper = $(e.currentTarget).find(".desc-wrapper");
-
-            //Make sure that the hovered card description shows above the card underneath
-            $(e.currentTarget).css("position", "relative");
-            $(e.currentTarget).css("z-index", "1");
-
-            //Only change bottom margin if card is not in the last row of 4 to prevent weird glitching
-            var numCardsInLastRow = $('.product-card').length % 4;
-            var newMarginBottom = 10;
-            //Determine negative margin under card
-            if ($('.product-card').index($(e.currentTarget)) < $('.product-card').length - numCardsInLastRow) {
-                newMarginBottom = ($(e.currentTarget).height() + referenceHeight + 20) * - 1;
-            } else {
-                newMarginBottom = (referenceHeight + 20) * - 1;
-            }
-
-            $(e.currentTarget).css("margin-bottom", newMarginBottom + "px");
-
-            $(descWrapper)
-                .stop(true, true)
-                .slideDown(100);
-
-            if (fullTitle.length > 0) {
-                $(shortTitle).hide();
-                $(fullTitle).show();
-            }
-
-        },
-        e => {
-            var descWrapper = $(e.currentTarget).find(".desc-wrapper");
-            var shortTitle = $(e.currentTarget).find(".custom-card-title-short");
-            var fullTitle = $(e.currentTarget).find(".custom-card-title-full");
-
-            if (fullTitle.length > 0) {
-                $(fullTitle).hide();
-                $(shortTitle).show();
-            }
-
-            $(descWrapper)
-                .stop(true, true)
-                .slideUp(100, () => {
-                    $(e.currentTarget)
-                        .css("margin-bottom", "10px")
-                        .css("z-index", "0");
-                });
-        }
-    );
 
 </script>
