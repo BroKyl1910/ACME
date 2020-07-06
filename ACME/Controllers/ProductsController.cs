@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ACME.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ACME.Controllers
 {
@@ -58,24 +59,56 @@ namespace ACME.Controllers
         }
 
         // GET: ProductsController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
-            return View();
+
+            ACMEDbContext context = new ACMEDbContext();
+            var product = await context.Products.FindAsync(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return View(product);
         }
 
         // POST: ProductsController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<string> Edit(int ProductID, string Name, string Description, string Price, IFormFile ProductImage)
         {
+            ACMEDbContext context = new ACMEDbContext();
+            Product product = context.Products.First(p => p.ProductCode == ProductID);
+            product.Name = Name;
+            product.Description= Description;
+            product.Price = Convert.ToDouble(Price.Replace('.', ','));
+
+            //If image is null, means value of file select wasnt changed
+            if (ProductImage != null)
+            {
+                using (var ms = new MemoryStream())
+                {
+                    ProductImage.CopyTo(ms);
+                    product.Image = ms.ToArray();
+                }
+            }
+
             try
             {
-                return RedirectToAction(nameof(Index));
+                context.Update(product);
+                await context.SaveChangesAsync();
             }
-            catch
+            catch (DbUpdateConcurrencyException)
             {
-                return View();
+                if (!context.Products.Any(e => e.ProductCode == ProductID))
+                {
+                    return "404. Product not found";
+                }
+                else
+                {
+                    throw;
+                }
             }
+            return "OK";
         }
 
         [HttpPost]
@@ -118,25 +151,15 @@ namespace ACME.Controllers
         }
 
 
-        // GET: ProductsController/Delete/5
-        public ActionResult Delete(int id)
+        // POST: Products/Delete/5
+        [HttpPost, ActionName("Delete")]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            return View();
-        }
-
-        // POST: ProductsController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            ACMEDbContext context = new ACMEDbContext();
+            var product = await context.Products.FindAsync(id);
+            context.Products.Remove(product);
+            await context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
     }
 }
