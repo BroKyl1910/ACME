@@ -23,7 +23,7 @@
                 <div class="dark-hr"></div>
                 <div class="image-container">
                     <label class="no-image-text">No image selected</label>
-                    <img src="https://thumbs.nosto.com/quick/magento-656ad115/8/127590/4d146173c04614389a07a211bfd96b73c7851413eb452c96a7843865d25ac57ea/A" alt="" class="upload-img">
+                    <img src="" alt="" class="upload-img">
                 </div>
             </div>
         </div>
@@ -38,6 +38,12 @@
                 <div class="form-control-container">
                     <input type="text" asp-for="Name" id="prod-name" placeholder="Product Name" class="form-input" maxlength="100">
                     <input asp-for="Price" id="prod-price" placeholder="Product Price" class="form-input">
+                    <select asp-for="Category" id="prod-category" placeholder="Category" class="form-input">
+                        <option>Select Category...</option> 
+                        <option>Arts &amp; Crafts</option> 
+                        <option>Electronics</option> 
+                        <option>Multimedia</option> 
+                    </select>
                     <textarea asp-for="Description" id="prod-desc" placeholder="Product Description" class="form-input" maxlength="200"></textarea>
                     <span class="text-danger error-text"></span>
 

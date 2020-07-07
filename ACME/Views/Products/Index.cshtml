@@ -16,7 +16,7 @@
 
     <div class="main-wrapper">
         <div class="custom-card-header">
-            <h1 class="title">Shop</h1>
+            <h1 class="title">Products</h1>
             <div class="header-controls">
                 <form action="/Products/Index" method="GET">
                     <input class="home-search-bar form-input" type="text" name="q" value="" placeholder="Search..." />
@@ -86,7 +86,7 @@
 
     $('.custom-card.product-card').on('click', (evt) => {
         var id = $(evt.currentTarget).attr('data-id');
-        window.location.replace('Products/Details/' + id);
+        window.location.replace('/Products/Details/' + id);
     });
 
     var idToDelete = null;
