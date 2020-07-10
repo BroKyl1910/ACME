@@ -11,7 +11,8 @@ namespace ACME.Helpers
     {
         public static Product CreateProduct()
         {
-            Product product = new Product { 
+            Product product = new Product
+            {
                 Name = "Stank Face",
                 Active = true,
                 Description = "Stank face like Stevie Ray Vaughan",
@@ -20,6 +21,37 @@ namespace ACME.Helpers
             };
 
             return product;
+        }
+
+        public static List<Category> CreateCategories()
+        {
+            var categories = new List<string> {
+                "Automotive & DIY",
+                "Baby & Toddler",
+                "Beauty",
+                "Books & Courses",
+                "Camping & Outdoor",
+                "Cellphones & Wearables",
+                "Fashion & Luggage",
+                "Computers & Electronics",
+                "Gaming",
+                "Garden, Pool & Patio",
+                "Groceries & Household",
+                "Health & Hygiene",
+                "Home & Appliances",
+                "Liquor",
+                "Office & Stationery",
+                "Pets",
+                "Sports & Training",
+                "Toys",
+                "TV, Audio & Media"
+            };
+            var categoryObjects = new List<Category>();
+            categories.ForEach(category => { 
+                categoryObjects.Add(new Category { Name = category }); 
+            });
+
+            return categoryObjects;
         }
 
         public static byte[] StringToByteArray(string hex)

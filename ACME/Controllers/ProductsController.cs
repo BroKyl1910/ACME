@@ -13,10 +13,14 @@ namespace ACME.Controllers
     public class ProductsController : Controller
     {
         // GET: ProductsController
-        public ActionResult Index()
+        public ActionResult Index(int? category, string? q)
         {
-            ACMEDbContext context = new ACMEDbContext();
 
+            ACMEDbContext context = new ACMEDbContext();
+            int selectedCategory = category ?? -1;
+
+            ViewBag.Categories = context.Categories.ToList();
+            ViewBag.SelectedCategory = selectedCategory;
             return View(context.Products);
         }
 

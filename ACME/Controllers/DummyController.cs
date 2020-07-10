@@ -12,7 +12,7 @@ namespace ACME.Controllers
     public class DummyController : Controller
     {
         // GET: DummyController
-        public String Index()
+        public String Product()
         {
             ACMEDbContext context = new ACMEDbContext();
             Product product = DummyData.CreateProduct();
@@ -21,73 +21,14 @@ namespace ACME.Controllers
             return "Dummy data added to DB";
         }
 
-        // GET: DummyController/Details/5
-        public ActionResult Details(int id)
+        public String Category()
         {
-            return View();
+            ACMEDbContext context = new ACMEDbContext();
+            var categories = DummyData.CreateCategories();
+            categories.ForEach(category => { context.Categories.Add(category); });
+            context.SaveChanges();
+            return "Dummy data added to DB";
         }
 
-        // GET: DummyController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: DummyController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: DummyController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: DummyController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: DummyController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: DummyController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
     }
 }

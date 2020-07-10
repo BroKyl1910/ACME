@@ -33,6 +33,26 @@
         }
         else
         {
+            <div class="panel-wrapper">
+                <ul class="panel-list">
+                    @{
+                        string active = (ViewBag.SelectedCategory == -1) ? "active" : "";
+                    }
+                    <li class="panel-list-item @active">
+                        <a href="/Products?category=-1" class="panel-list-item-link">View All Categories</a>
+
+                    </li>
+                    @foreach (Category category in ViewBag.Categories)
+                    {
+
+                        active = (ViewBag.SelectedCategory == category.CategoryID) ? "active" : "";
+
+                        <li class="panel-list-item @active">
+                            <a href="/Products?category=@category.CategoryID" class="panel-list-item-link">@category.Name</a>
+                        </li>
+                    }
+                </ul>
+            </div>
             <div class="card-wrapper">
                 @foreach (Product product in Model)
                 {
@@ -63,6 +83,7 @@
                     </div>
                 }
             </div>
+
         }
 
     </div>
@@ -83,6 +104,39 @@
 </div>
 
 <script>
+    var mouseX;
+    $(document).mousemove(function (e) {
+        mouseX = e.pageX;
+    });
+
+    var mustScroll = false;
+    var panelWrapper = $('.panel-wrapper');
+    $(panelWrapper).on('mouseenter', (evt) => {
+        scroll();
+    });
+
+    $(panelWrapper).on('mouseleave', (evt) => {
+        mustScroll = false;
+    });
+
+    function scroll() {
+        var distanceFromLeft = mouseX - $(panelWrapper).position().left;
+        var distanceFromRight = ($(panelWrapper).position().left + $(panelWrapper).width()) - mouseX;
+        console.log(distanceFromLeft, distanceFromRight);
+
+        if (distanceFromLeft <= 75) {
+            mustScroll = true;
+            $(panelWrapper).animate({ scrollLeft: '+=-20' }, 100);
+        } else if (distanceFromRight <= 75) {
+            mustScroll = true;
+            $(panelWrapper).animate({ scrollLeft: '+=20' }, 100);
+        } else {
+            mustScroll = false;
+        }
+        if (mustScroll) {
+            //setTimeout(scroll, 800);
+        }
+    }
 
     $('.custom-card.product-card').on('click', (evt) => {
         var id = $(evt.currentTarget).attr('data-id');
