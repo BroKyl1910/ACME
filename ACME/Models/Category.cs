@@ -6,5 +6,10 @@ namespace ACME.Models
         [Key]
         public int CategoryID { get; set; }
         public string Name { get; set; }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

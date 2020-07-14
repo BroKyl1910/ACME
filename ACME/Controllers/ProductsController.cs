@@ -8,6 +8,7 @@ using ACME.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace ACME.Controllers
 {
@@ -22,14 +23,36 @@ namespace ACME.Controllers
 
             ViewBag.Categories = context.Categories.ToList();
             ViewBag.SelectedCategory = selectedCategory;
-            return View(context.Products);
+            var productsWithCategories = context.Products.Include(p => p.Category);
+
+            IQueryable<Product> productsKeywordFiltered;
+            if(q!= null)
+            {
+                productsKeywordFiltered = productsWithCategories.Where(p => p.Name.Contains(q));
+            }
+            else
+            {
+                productsKeywordFiltered = productsWithCategories;
+            }
+
+            IQueryable<Product> productsCategoryFiltered;
+            if (selectedCategory != -1)
+            {
+                productsCategoryFiltered = productsKeywordFiltered.Where(p => p.Category.CategoryID == selectedCategory);
+            }
+            else
+            {
+                productsCategoryFiltered = productsKeywordFiltered;
+            }
+
+            return View(productsCategoryFiltered.ToList());
         }
 
         // GET: ProductsController/Details/5
         public ActionResult Details(int id)
         {
             ACMEDbContext context = new ACMEDbContext();
-            Product product = context.Products.First(p => p.ProductCode == id);
+            Product product = context.Products.Where(p => p.ProductCode == id).Include(p => p.Category).First();
             return View(product);
         }
 

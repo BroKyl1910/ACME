@@ -12,7 +12,7 @@ namespace ACME.Controllers
     public class DummyController : Controller
     {
         // GET: DummyController
-        public String Product()
+        public string Product()
         {
             ACMEDbContext context = new ACMEDbContext();
             Product product = DummyData.CreateProduct();
@@ -21,7 +21,7 @@ namespace ACME.Controllers
             return "Dummy data added to DB";
         }
 
-        public String Category()
+        public string Category()
         {
             ACMEDbContext context = new ACMEDbContext();
             var categories = DummyData.CreateCategories();

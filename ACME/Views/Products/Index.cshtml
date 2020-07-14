@@ -19,6 +19,13 @@
             <h1 class="title">Products</h1>
             <div class="header-controls">
                 <form action="/Products/Index" method="GET">
+                    <select id="prod-category" name="category" placeholder="Category" class="search-category-combobox form-input">
+                        <option value="-1">Select Category...</option>
+                        @foreach (Category category in ViewBag.Categories)
+                        {
+                            <option value="@category.CategoryID">@category.Name</option>
+                        }
+                    </select>
                     <input class="home-search-bar form-input" type="text" name="q" value="" placeholder="Search..." />
                 </form>
 
@@ -27,44 +34,47 @@
 
         </div>
         <div class="dark-hr"></div>
+        <div class="panel-wrapper">
+            <button class="scroll-button left-scroll">
+                <span class="material-icons scroll-icon">
+                    navigate_before
+                </span>
+            </button>
+            <div class="panel-list-wrapper">
+                <input type="hidden" id="selected-category" value="@ViewBag.SelectedCategory" />
+                <ul class="panel-list">
+                    @{
+                        string active = (ViewBag.SelectedCategory == -1) ? "active" : "";
+                    }
+                    <li class="panel-list-item @active">
+                        <a href="/Products?category=-1" class="panel-list-item-link" id="cat--1">View All Categories</a>
+
+                    </li>
+                    @foreach (Category category in ViewBag.Categories)
+                    {
+
+                        active = (ViewBag.SelectedCategory == category.CategoryID) ? "active" : "";
+
+                        <li class="panel-list-item @active">
+                            <a href="/Products?category=@category.CategoryID" class="panel-list-item-link" id="cat-@category.CategoryID">@category.Name</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <button class="scroll-button right-scroll">
+                <span class="material-icons scroll-icon">
+                    navigate_next
+                </span>
+            </button>
+        </div>
+
         @if (Model.Count() == 0)
         {
             <div class="no-products-text">No products found</div>
         }
         else
         {
-            <div class="panel-wrapper">
-                <button class="scroll-button left-scroll">
-                    <span class="material-icons scroll-icon">
-                        navigate_before
-                    </span>
-                </button>
-                <div class="panel-list-wrapper">
-                    <ul class="panel-list">
-                        @{
-                            string active = (ViewBag.SelectedCategory == -1) ? "active" : "";
-                        }
-                        <li class="panel-list-item @active">
-                            <a href="/Products?category=-1" class="panel-list-item-link">View All Categories</a>
 
-                        </li>
-                        @foreach (Category category in ViewBag.Categories)
-                        {
-
-                            active = (ViewBag.SelectedCategory == category.CategoryID) ? "active" : "";
-
-                            <li class="panel-list-item @active">
-                                <a href="/Products?category=@category.CategoryID" class="panel-list-item-link">@category.Name</a>
-                            </li>
-                        }
-                    </ul>
-                </div>
-                <button class="scroll-button right-scroll">
-                    <span class="material-icons scroll-icon">
-                        navigate_next
-                    </span>
-                </button>
-            </div>
             <div class="card-wrapper">
                 @foreach (Product product in Model)
                 {
@@ -120,12 +130,16 @@
     var scrollLeftButton = $('.left-scroll');
     var scrollRightButton = $('.right-scroll');
 
+    var selectedCategory = $('#selected-category').val();
+    $('#cat-' + selectedCategory).get(0).scrollIntoView({ inline: "start" });
+    $(panelListWrapper).get(0).scrollLeft -= 50;
+
     $(scrollLeftButton).on('click', () => {
-        $(panelListWrapper).animate({ scrollLeft: '-=80' }, 100);
+        $(panelListWrapper).animate({ scrollLeft: '-=100' }, 100);
     });
-    
+
     $(scrollRightButton).on('click', () => {
-        $(panelListWrapper).animate({ scrollLeft: '+=80' }, 100);
+        $(panelListWrapper).animate({ scrollLeft: '+=100' }, 100);
     });
 
     $('.custom-card.product-card').on('click', (evt) => {
