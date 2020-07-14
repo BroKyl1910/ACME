@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,8 +16,8 @@ namespace ACME.Controllers
         // GET: ProductsController
         public ActionResult Index(int? category, string? q)
         {
-
             ACMEDbContext context = new ACMEDbContext();
+
             int selectedCategory = category ?? -1;
 
             ViewBag.Categories = context.Categories.ToList();
@@ -25,28 +26,34 @@ namespace ACME.Controllers
         }
 
         // GET: ProductsController/Details/5
-        public async Task<ActionResult> Details(int id)
+        public ActionResult Details(int id)
         {
             ACMEDbContext context = new ACMEDbContext();
-            return View(await context.Products.FindAsync(id));
+            Product product = context.Products.First(p => p.ProductCode == id);
+            return View(product);
         }
 
         // GET: ProductsController/Create
         public ActionResult Create()
         {
+            ACMEDbContext context = new ACMEDbContext();
+            ViewBag.Categories = context.Categories.ToList();
             return View();
         }
 
         // POST: Products/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<string> Create(string Name, string Description, string Price, IFormFile ProductImage)
+        public async Task<string> Create(string Name, string Description, string Price, IFormFile ProductImage, int CategoryID)
         {
+            ACMEDbContext context = new ACMEDbContext();
+
             Product product = new Product()
             {
                 Name = Name,
                 Description = Description,
-                Price = Convert.ToDouble(Price.Replace('.', ','))
+                Price = Convert.ToDouble(Price.Replace('.', ',')),
+                Category = context.Categories.First(c => c.CategoryID == CategoryID)
             };
 
             //https://stackoverflow.com/questions/42741170/how-to-save-images-to-database-using-asp-net-core
@@ -55,7 +62,6 @@ namespace ACME.Controllers
                 ProductImage.CopyTo(ms);
                 product.Image = ms.ToArray();
             }
-            ACMEDbContext context = new ACMEDbContext();
 
             context.Add(product);
             await context.SaveChangesAsync();
@@ -69,23 +75,26 @@ namespace ACME.Controllers
 
             ACMEDbContext context = new ACMEDbContext();
             var product = await context.Products.FindAsync(id);
+            var categories = context.Categories.ToList();
             if (product == null)
             {
                 return NotFound();
             }
+            ViewBag.Categories = categories;
             return View(product);
         }
 
         // POST: ProductsController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<string> Edit(int ProductID, string Name, string Description, string Price, IFormFile ProductImage)
+        public async Task<string> Edit(int ProductID, string Name, string Description, string Price, IFormFile ProductImage, int CategoryID)
         {
             ACMEDbContext context = new ACMEDbContext();
             Product product = context.Products.First(p => p.ProductCode == ProductID);
             product.Name = Name;
             product.Description= Description;
             product.Price = Convert.ToDouble(Price.Replace('.', ','));
+            product.Category = context.Categories.ToList().First(c => c.CategoryID == CategoryID);
 
             //If image is null, means value of file select wasnt changed
             if (ProductImage != null)
@@ -120,7 +129,7 @@ namespace ACME.Controllers
         [ValidateAntiForgeryToken]
         /*Separate validation method so that I can perform backend validation on create and edit forms as I am not using razor, I'm using XMLHttpRequest
           so I need to validate manually*/
-        public string Validate([Bind("ProductID,Name,Description,Price")] Product product, IFormFile ProductImage, bool Editing)
+        public string Validate([Bind("ProductID,Name,Description,Price")] Product product, int CategoryID , IFormFile ProductImage, bool Editing)
         {
             //https://stackoverflow.com/questions/42741170/how-to-save-images-to-database-using-asp-net-core
             if (ProductImage != null)
@@ -147,7 +156,17 @@ namespace ACME.Controllers
                 return "Please provide an image of type .png, .jpg, or .gif";
             }
 
-            if (ModelState.IsValid)
+            if(CategoryID == -1)
+            {
+                return "Please provide a category";
+            }
+
+            ACMEDbContext context = new ACMEDbContext();
+            product.Category = context.Categories.First(c => c.CategoryID == CategoryID);
+            
+            var validationResults = new List<ValidationResult>();
+            var validationContext = new ValidationContext(product, null, null);
+            if (Validator.TryValidateObject(product, validationContext, validationResults, true))
             {
                 return "OK";
             }

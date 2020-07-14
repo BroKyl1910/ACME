@@ -7,6 +7,7 @@ namespace ACME.Models
         [Key]
         public int ProductCode { get; set; }
 
+        [Required(ErrorMessage = "Please fill in product category")]
         public Category Category{ get; set; }
 
         [Required(ErrorMessage = "Please fill in product name")]

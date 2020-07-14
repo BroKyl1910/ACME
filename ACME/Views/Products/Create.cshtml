@@ -39,10 +39,11 @@
                     <input type="text" asp-for="Name" id="prod-name" placeholder="Product Name" class="form-input" maxlength="100">
                     <input asp-for="Price" id="prod-price" placeholder="Product Price" class="form-input">
                     <select asp-for="Category" id="prod-category" placeholder="Category" class="form-input">
-                        <option>Select Category...</option> 
-                        <option>Arts &amp; Crafts</option> 
-                        <option>Electronics</option> 
-                        <option>Multimedia</option> 
+                        <option value="-1">Select Category...</option>
+                        @foreach (Category category in ViewBag.Categories)
+                        {
+                            <option value="@category.CategoryID">@category.Name</option>
+                        }
                     </select>
                     <textarea asp-for="Description" id="prod-desc" placeholder="Product Description" class="form-input" maxlength="200"></textarea>
                     <span class="text-danger error-text"></span>
@@ -92,6 +93,7 @@
         formData.append("Price", $('#prod-price').val().replace('.',','));
         formData.append("Description", $('#prod-desc').val());
         formData.append("ProductImage", $('#file')[0].files[0]);
+        formData.append("CategoryID", $('#prod-category').val());
         /*Editing = false used to determine whether an image is required or not because if the user is editing,
           there will already be an image assigned to the product*/
         formData.append("Editing", false);
