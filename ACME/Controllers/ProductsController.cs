@@ -104,6 +104,7 @@ namespace ACME.Controllers
                 return NotFound();
             }
             ViewBag.Categories = categories;
+            ViewBag.SelectedCategory = product.Category.CategoryID;
             return View(product);
         }
 

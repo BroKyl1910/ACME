@@ -33,6 +33,9 @@
             </div>
         </nav>
     </header>
+    <div class="body-spacer">
+
+    </div>
     <div class="main-container-wrapper">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -48,5 +51,17 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
+    <script>
+        var navbar = $('.custom-navbar');
+        $(window ).on('scroll', () => {
+            var scroll = $(window).scrollTop();
+            if (scroll > 0) {
+                $(navbar).addClass('scroll-navbar');
+            } else {
+                $(navbar).removeClass('scroll-navbar');
+            }
+        });
+
+    </script>
 </body>
 </html>

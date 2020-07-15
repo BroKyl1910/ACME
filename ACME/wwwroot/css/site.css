@@ -101,6 +101,15 @@ body {
     background-color: #142850;
     justify-content: space-between;
     align-content: center;
+    position: fixed;    
+}
+
+.scroll-navbar{
+    box-shadow: 0 5px 5px rgba(0,0,0,0.5);
+}
+
+.body-spacer {
+    height: 80px;
 }
 
 body {

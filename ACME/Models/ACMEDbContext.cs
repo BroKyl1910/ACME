@@ -20,8 +20,8 @@ namespace ACME.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //optionsBuilder.UseSqlServer("Data Source=DESKTOP-GA32F87\\SQLEXPRESS;Initial Catalog=ACME;Integrated Security=True");
-            optionsBuilder.UseSqlServer("Data Source=LAPTOP-KFVM6M83\\SQLEXPRESS;Initial Catalog=ACME;Integrated Security=True");
+            optionsBuilder.UseSqlServer("Data Source=DESKTOP-GA32F87\\SQLEXPRESS;Initial Catalog=ACME;Integrated Security=True");
+            //optionsBuilder.UseSqlServer("Data Source=LAPTOP-KFVM6M83\\SQLEXPRESS;Initial Catalog=ACME;Integrated Security=True");
         }
     }
 }

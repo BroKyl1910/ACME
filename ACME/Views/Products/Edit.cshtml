@@ -37,12 +37,13 @@
 
                 <div class="form-control-container">
                     <input type="hidden" value="@Model.ProductCode" id="prod-id">
+                    <input type="hidden" value="@ViewBag.SelectedCategory" id="selected-cat">
 
                     <input type="text" asp-for="Name" id="prod-name" placeholder="Product Name" class="form-input" maxlength="100">
                     <input asp-for="Price" id="prod-price" placeholder="Product Price" class="form-input">
                     <select asp-for="Category" id="prod-category" placeholder="Category" class="form-input">
                         <option value="-1">Select Category...</option>
-                        @foreach(Category category in ViewBag.Categories)
+                        @foreach (Category category in ViewBag.Categories)
                         {
                             string selectedStr = (category.CategoryID == Model.Category.CategoryID) ? "selected" : "";
                             <option value="@category.CategoryID">@category.Name</option>
@@ -74,6 +75,11 @@
     //There will be an assigned image, so display edit not add
     $(".image-add-icon").css("display", "none");
     $(".image-edit-icon").css("display", "block");
+
+    var selectedCategory = $('#selected-cat').val();
+    console.log(selectedCategory);
+    $('#prod-category').val(selectedCategory).change();
+
 
     //Display picture update
     $("#file").change(function (e) {
