@@ -24,11 +24,11 @@
                 @if (HttpContextAccessor.HttpContext.Session.GetString("Email") != null)
                 {
                     <a asp-area="" asp-controller="Home" asp-action="Index" class="nav-item">Home</a>
-                    <a asp-area="" asp-controller="User" asp-action="Logout" class="nav-item">Log Out - @HttpContextAccessor.HttpContext.Session.GetString("Name")</a>
+                    <a asp-area="" asp-controller="Users" asp-action="Logout" class="nav-item">Log Out - @HttpContextAccessor.HttpContext.Session.GetString("Name")</a>
                 }
                 else
                 {
-                    <a asp-area="" asp-controller="User" asp-action="Login" class="nav-item">Log In</a>
+                    <a asp-area="" asp-controller="Users" asp-action="Login" class="nav-item">Log In</a>
                 }
             </div>
         </nav>

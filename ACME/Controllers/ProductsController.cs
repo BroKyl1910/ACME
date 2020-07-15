@@ -21,12 +21,12 @@ namespace ACME.Controllers
 
             int selectedCategory = category ?? -1;
 
-            ViewBag.Categories = context.Categories.ToList();
+            ViewBag.Categories = context.Categories.OrderBy(c => c.Name).ToList();
             ViewBag.SelectedCategory = selectedCategory;
             var productsWithCategories = context.Products.Include(p => p.Category);
 
             IQueryable<Product> productsKeywordFiltered;
-            if(q!= null)
+            if (q != null)
             {
                 productsKeywordFiltered = productsWithCategories.Where(p => p.Name.Contains(q));
             }
@@ -60,7 +60,7 @@ namespace ACME.Controllers
         public ActionResult Create()
         {
             ACMEDbContext context = new ACMEDbContext();
-            ViewBag.Categories = context.Categories.ToList();
+            ViewBag.Categories = context.Categories.OrderBy(c => c.Name).ToList();
             return View();
         }
 
@@ -98,7 +98,7 @@ namespace ACME.Controllers
 
             ACMEDbContext context = new ACMEDbContext();
             var product = await context.Products.FindAsync(id);
-            var categories = context.Categories.ToList();
+            var categories = context.Categories.OrderBy(c => c.Name).ToList();
             if (product == null)
             {
                 return NotFound();
@@ -116,7 +116,7 @@ namespace ACME.Controllers
             ACMEDbContext context = new ACMEDbContext();
             Product product = context.Products.First(p => p.ProductCode == ProductID);
             product.Name = Name;
-            product.Description= Description;
+            product.Description = Description;
             product.Price = Convert.ToDouble(Price.Replace('.', ','));
             product.Category = context.Categories.ToList().First(c => c.CategoryID == CategoryID);
 
@@ -153,7 +153,7 @@ namespace ACME.Controllers
         [ValidateAntiForgeryToken]
         /*Separate validation method so that I can perform backend validation on create and edit forms as I am not using razor, I'm using XMLHttpRequest
           so I need to validate manually*/
-        public string Validate([Bind("ProductID,Name,Description,Price")] Product product, int CategoryID , IFormFile ProductImage, bool Editing)
+        public string Validate([Bind("ProductID,Name,Description,Price")] Product product, int CategoryID, IFormFile ProductImage, bool Editing)
         {
             //https://stackoverflow.com/questions/42741170/how-to-save-images-to-database-using-asp-net-core
             if (ProductImage != null)
@@ -180,14 +180,14 @@ namespace ACME.Controllers
                 return "Please provide an image of type .png, .jpg, or .gif";
             }
 
-            if(CategoryID == -1)
+            if (CategoryID == -1)
             {
                 return "Please provide a category";
             }
 
             ACMEDbContext context = new ACMEDbContext();
             product.Category = context.Categories.First(c => c.CategoryID == CategoryID);
-            
+
             var validationResults = new List<ValidationResult>();
             var validationContext = new ValidationContext(product, null, null);
             if (Validator.TryValidateObject(product, validationContext, validationResults, true))

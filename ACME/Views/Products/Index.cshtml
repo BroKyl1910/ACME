@@ -133,13 +133,14 @@
     var selectedCategory = $('#selected-category').val();
     $('#cat-' + selectedCategory).get(0).scrollIntoView({ inline: "start" });
     $(panelListWrapper).get(0).scrollLeft -= 50;
+    $('#prod-category').val(selectedCategory).change();
 
     $(scrollLeftButton).on('click', () => {
-        $(panelListWrapper).animate({ scrollLeft: '-=100' }, 100);
+        $(panelListWrapper).animate({ scrollLeft: '-=200' }, 100);
     });
 
     $(scrollRightButton).on('click', () => {
-        $(panelListWrapper).animate({ scrollLeft: '+=100' }, 100);
+        $(panelListWrapper).animate({ scrollLeft: '+=200' }, 100);
     });
 
     $('.custom-card.product-card').on('click', (evt) => {
