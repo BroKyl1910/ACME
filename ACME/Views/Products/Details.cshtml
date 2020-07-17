@@ -22,11 +22,69 @@
         <div class="details-body-cart-block">
             <h2>R @string.Format("{0:0.00}", (decimal)Model.Price)</h2>
             <div class="hr-dark"></div>
-            <div class="quantity-wrapper">
-                <input type="number" class="quantity-input" name="qty" value="1" />
-                @*<label for="qty" class="quantity-label">Quantity</label>*@
-            </div>
-            <button class="form-button">Add to cart</button>
+            <input type="hidden" id="stock" value="@ViewBag.Stock" />
+            <input type="hidden" id="prod-id" value="@Model.ProductCode" />
+            <span class="stock-text">@ViewBag.Stock left in stock</span>
+
+            @if (ViewBag.Stock > 0)
+            {
+                @if (ViewBag.IsLoggedIn != true)
+                {
+                    // Not logged in
+                    <div class="log-in-text-wrapper">
+                        <span class="log-in-text">Please log in to add to cart</span>
+                    </div>
+                }
+                else
+                {
+                    if (ViewBag.UserType == 2)
+                    {
+                        //Customer
+                        <div class="quantity-wrapper">
+                            <input type="number" class="quantity-input form-input" id="qty" value="1" min="1" max="@ViewBag.Stock" />
+                        </div>
+                        <button id="add-to-cart" class="form-button add-to-cart-button">Add to cart</button>
+                    }
+                    else
+                    {
+                        //Employee
+                        <div class="quantity-wrapper">
+                            <input type="number" class="quantity-input form-input" id="qty" value="1" min="1" max="100" />
+                        </div>
+                        <button id="restock-button" class="form-button add-to-cart-button">Restock</button>
+                    }
+
+                }
+            }
         </div>
     </div>
 </div>
+
+<script>
+    var stockCount = $('#stock').val();
+    var stockText = $('.stock-text');
+    var color = "";
+    if (stockCount < 5) {
+        color = "red";
+    } else {
+        color = "green";
+    }
+    $(stockText).css("color", color);
+
+    $('#restock-button').click((evt) => {
+        console.log('click');
+        var prodID = $('#prod-id').val();
+        var qty = $('#qty').val();
+        $.ajax({
+            method: "POST",
+            url: '/Stock/Restock',
+            data: {
+                ProductCode: prodID,
+                Quantity: qty
+            },
+            success: (res) => {
+                location.reload();
+            }
+        });
+    });
+</script>

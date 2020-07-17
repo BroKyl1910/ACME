@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using ACME.Helpers;
 using ACME.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,10 +21,7 @@ namespace ACME.Controllers
             ACMEDbContext context = new ACMEDbContext();
 
             int selectedCategory = category ?? -1;
-
-            ViewBag.Categories = context.Categories.OrderBy(c => c.Name).ToList();
-            ViewBag.SelectedCategory = selectedCategory;
-            var productsWithCategories = context.Products.Include(p => p.Category);
+            var productsWithCategories = context.Products.Include(p => p.Category).Where(p => p.Active == true);
 
             IQueryable<Product> productsKeywordFiltered;
             if (q != null)
@@ -45,6 +43,18 @@ namespace ACME.Controllers
                 productsCategoryFiltered = productsKeywordFiltered;
             }
 
+            bool isLoggedIn = HttpContext.Session.GetString("Email") != null;
+            if (isLoggedIn)
+            {
+                User user = context.Users.Where(u => u.Email.Equals(HttpContext.Session.GetString("Email"))).Include(u => u.UserType).First();
+                ViewBag.UserType = user.UserType.UserTypeID;
+            }
+            else
+            {
+                ViewBag.UserType = -1;
+            }
+            ViewBag.Categories = context.Categories.OrderBy(c => c.Name).ToList();
+            ViewBag.SelectedCategory = selectedCategory;
             return View(productsCategoryFiltered.ToList());
         }
 
@@ -53,6 +63,19 @@ namespace ACME.Controllers
         {
             ACMEDbContext context = new ACMEDbContext();
             Product product = context.Products.Where(p => p.ProductCode == id).Include(p => p.Category).First();
+            int stockCount = context.Stock.First(s => s.Product.ProductCode == product.ProductCode).Quantity;
+            bool isLoggedIn = HttpContext.Session.GetString("Email") != null;
+            if (isLoggedIn)
+            {
+                User user = context.Users.Where(u => u.Email.Equals(HttpContext.Session.GetString("Email"))).Include(u => u.UserType).First();
+                ViewBag.UserType = user.UserType.UserTypeID;
+            }
+            else
+            {
+                ViewBag.UserType = -1;
+            }
+            ViewBag.IsLoggedIn = isLoggedIn;
+            ViewBag.Stock = stockCount;
             return View(product);
         }
 
@@ -76,7 +99,8 @@ namespace ACME.Controllers
                 Name = Name,
                 Description = Description,
                 Price = Convert.ToDouble(Price.Replace('.', ',')),
-                Category = context.Categories.First(c => c.CategoryID == CategoryID)
+                Category = context.Categories.First(c => c.CategoryID == CategoryID),
+                Active = true
             };
 
             //https://stackoverflow.com/questions/42741170/how-to-save-images-to-database-using-asp-net-core
@@ -205,7 +229,7 @@ namespace ACME.Controllers
         {
             ACMEDbContext context = new ACMEDbContext();
             var product = await context.Products.FindAsync(id);
-            context.Products.Remove(product);
+            product.Active = false;
             await context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

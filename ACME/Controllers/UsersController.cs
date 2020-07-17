@@ -39,7 +39,7 @@ namespace ACME.Controllers
             {
                 HttpContext.Session.SetString("Email", user.Email);
                 HttpContext.Session.SetString("Name", user.Name);
-                HttpContext.Session.SetInt32("UserType", (int) user.UserType.UserTypeID);
+                HttpContext.Session.SetInt32("UserType", user.UserType.UserTypeID);
                 return RedirectToAction("Index", "Home");
             }
             else
