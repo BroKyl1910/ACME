@@ -23,7 +23,21 @@
                 @inject IHttpContextAccessor HttpContextAccessor
                 @if (HttpContextAccessor.HttpContext.Session.GetString("Email") != null)
                 {
-                    <a asp-area="" asp-controller="Users" asp-action="Logout" class="nav-item">Log Out - @HttpContextAccessor.HttpContext.Session.GetString("Name")</a>
+                    <div class="dropdown-wrapper">
+                        <span class="nav-item nav-dropdown-header">
+                            Welcome,&nbsp;<strong>@HttpContextAccessor.HttpContext.Session.GetString("Name")</strong>
+                            <span class="material-icons drop-down-arrow">
+                                arrow_drop_down
+                            </span>
+                        </span>
+
+                        <div class="dropdown-content">
+                            <div class="dropdown-spacer"></div>
+                            <a href="#" class="nav-item dropdown-nav-item">Shopping Cart</a>
+                            <a href="#" class="nav-item dropdown-nav-item">Orders</a>
+                            <a asp-controller="Users" asp-action="Logout" class="nav-item dropdown-nav-item"><strong>Logout</strong></a>
+                        </div>
+                    </div>
                 }
                 else
                 {
@@ -43,8 +57,8 @@
 
     <footer class="footer text-muted">
         @*<div class="container">
-            &copy; 2020 - ACME
-        </div>*@
+                &copy; 2020 - ACME
+            </div>*@
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -52,7 +66,7 @@
     @RenderSection("Scripts", required: false)
     <script>
         var navbar = $('.custom-navbar');
-        $(window ).on('scroll', () => {
+        $(window).on('scroll', () => {
             var scroll = $(window).scrollTop();
             if (scroll > 0) {
                 $(navbar).addClass('scroll-navbar');

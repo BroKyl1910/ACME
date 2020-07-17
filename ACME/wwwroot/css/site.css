@@ -95,13 +95,14 @@ body {
 /*https://colorhunt.co/palette/180289*/
 .custom-navbar {
     width: 100%;
-    padding: 10px 50px;
+    padding: 10px 80px;
     display: flex;
     flex-direction: row;
     background-color: #142850;
     justify-content: space-between;
     align-content: center;
     position: fixed;
+    color: white;
 }
 
 .scroll-navbar {
@@ -126,13 +127,60 @@ body {
 }
 
 
-a.nav-item {
+a.nav-item, span.nav-item {
     color: rgba(255,255,255,1);
     margin-left: 20px;
 }
 
-    a.nav-item:hover {
+    a.nav-item:hover, span.nav-item:hover {
         text-decoration: none;
+    }
+
+.nav-dropdown-header {
+    display: flex;
+}
+
+.material-icons.drop-down-arrow {
+    color: rgba(255,255,255,0.7);
+}
+
+.dropdown-wrapper:hover .material-icons.drop-down-arrow {
+    color: rgba(255,255,255,1);
+}
+
+.material-icons.drop-down-arrow:hover {
+    color: white;
+}
+
+.dropdown-wrapper:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown-spacer {
+    padding-bottom: 15px;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background: #142850;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+    border-radius: 0 0 10px 10px;
+}
+
+.dropdown-nav-item:last-child {
+    border-radius: 0 0 10px 10px;
+}
+
+a.dropdown-nav-item {
+    display: block;
+    text-align: left;
+    margin: 0;
+    padding: 10px 20px;
+}
+
+    a.dropdown-nav-item:hover {
+        background-color: #0b1529;
     }
 
 a.navbar-brand-name {
@@ -877,8 +925,7 @@ form {
     background: rgba(0,0,0,0.1);
 }
 
-.log-in-text{
-
+.log-in-text {
 }
 
 .quantity-wrapper {
