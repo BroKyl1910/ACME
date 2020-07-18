@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Shopping Cart";
 }
 
 <div class="body-content">
@@ -12,13 +12,61 @@
         </div>
         <div class="dark-hr"></div>
 
-        @*@if (Model.Count() == 0)
-            {
-                <div class="no-products-text">No products found</div>
-            }*@
+        <div class="cart-body-wrapper">
+            <div class="cart-item-wrapper">
+                @foreach (ProductShoppingCart cartItem in ViewBag.CartItems)
+                {
+                    <div class="cart-item">
+                        <div class="cart-item-info-block">
+                            <div class="cart-item-image-wrapper">
+                                <img class="cart-item-image" src="data:image/jpeg;base64,@Convert.ToBase64String(cartItem.Product.Image)" />
+                            </div>
+                            <div class="cart-item-info-wrapper">
+                                <div class="cart-item-header">
+                                    <h3><a href="/Products/Details/@cartItem.Product.ProductCode" class="cart-item-link">@cartItem.Product.Name</a></h3>
+                                    <h3>R @string.Format("{0:0.00}", (decimal)@cartItem.Product.Price)</h3>
+                                </div>
+                                <div class="hr-dark"></div>
 
+                                <div class="cart-quantity-wrapper">
+                                    <label class="cart-quantity-label">Quantity:</label>
+                                    <input type="number" class="cart-quantity-input" value="@cartItem.Quantity" min="1" max="10" />
+                                </div>
+                                <div>
+                                    <span class="remove-text" data-id="@cartItem.Product.ProductCode">Remove from cart</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="cart-total-block">
+                <h3>Total - @ViewBag.TotalItems Items</h3>
+                <div class="hr-dark"></div>
+                <div class="cart-total-info">
+                    <span>Item total: R @string.Format("{0:0.00}", (decimal)ViewBag.GrandTotal)</span>
+                    <button id="complete-order-button" class="form-button complete-order-button">Complete Order</button>
+                </div>
+            </div>
+        </div>
 
 
     </div>
 
 </div>
+
+<script>
+    $('.remove-text').click((e) => {
+        var id = $(e.currentTarget).attr('data-id');
+        $.ajax({
+            method: "POST",
+            url: "/ShoppingCarts/Remove",
+            data: {
+                ProductCode: id
+            },
+            success: () => {
+                location.reload();
+            }
+        });
+    });
+</script>

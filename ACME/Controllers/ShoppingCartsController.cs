@@ -43,9 +43,33 @@ namespace ACME.Controllers
             return "Ok";
         }
 
-        // GET: ShoppingCart/Details/5
-        public ActionResult Details(int id)
+        // POST: ShoppingCarts/Remove
+        [HttpPost]
+        public string Remove(int ProductCode)
         {
+            ACMEDbContext context = new ACMEDbContext();
+            string email = HttpContext.Session.GetString("Email");
+            var user = context.Users.Where(u => u.Email == email).Include(u => u.ShoppingCart).First();
+            ShoppingCart cart = user.ShoppingCart;
+
+            ProductShoppingCart entry = context.ProductShoppingCarts.First(psc => psc.Product.ProductCode == ProductCode && psc.ShoppingCart.ShoppingCartID == cart.ShoppingCartID);
+            context.ProductShoppingCarts.Remove(entry);
+            context.SaveChanges();
+            return "Ok";
+        }
+
+        // GET: ShoppingCart/Details/5
+        public ActionResult Details()
+        {
+            ACMEDbContext context = new ACMEDbContext();
+            string email = HttpContext.Session.GetString("Email");
+            var user = context.Users.Where(u => u.Email == email).Include(u => u.ShoppingCart).First();
+            ShoppingCart cart = user.ShoppingCart;
+            var cartItems = context.ProductShoppingCarts.Where(psc => psc.ShoppingCart.ShoppingCartID == cart.ShoppingCartID).Include(psc => psc.Product).ToList();
+
+            ViewBag.TotalItems = cartItems.Sum(c => c.Quantity);
+            ViewBag.GrandTotal = cartItems.Sum(c => (c.Quantity * c.Product.Price));
+            ViewBag.CartItems = cartItems;
             return View();
         }
 
