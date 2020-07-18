@@ -37,25 +37,31 @@
                 }
                 else
                 {
+                    // Logged in
                     if (ViewBag.UserType == 2)
                     {
-                        //Customer
+                        // Customer
                         <div class="quantity-wrapper">
                             <input type="number" class="quantity-input form-input" id="qty" value="1" min="1" max="@ViewBag.Stock" />
                         </div>
-                        <button id="add-to-cart" class="form-button add-to-cart-button">Add to cart</button>
-                    }
-                    else
-                    {
-                        //Employee
-                        <div class="quantity-wrapper">
-                            <input type="number" class="quantity-input form-input" id="qty" value="1" min="1" max="100" />
-                        </div>
-                        <button id="restock-button" class="form-button add-to-cart-button">Restock</button>
+                        <button id="add-to-cart-button" class="form-button add-to-cart-button">Add to cart</button>
                     }
 
                 }
             }
+
+            @if (ViewBag.UserType == 1)
+            {
+                //Employee
+                <div class="quantity-wrapper">
+                    @*<input type="number" class="quantity-input form-input" id="qty" value="1" min="1" max="100" />*@
+                    @*Unlimited for now while testing*@
+                    <input type="number" class="quantity-input form-input" id="qty" value="1" />
+                </div>
+                <button id="restock-button" class="form-button add-to-cart-button">Restock</button>
+
+            }
+
         </div>
     </div>
 </div>
@@ -72,7 +78,6 @@
     $(stockText).css("color", color);
 
     $('#restock-button').click((evt) => {
-        console.log('click');
         var prodID = $('#prod-id').val();
         var qty = $('#qty').val();
         $.ajax({
@@ -87,4 +92,21 @@
             }
         });
     });
+
+    $('#add-to-cart-button').click(() => {
+        var prodID = $('#prod-id').val();
+        var qty = $('#qty').val();
+        $.ajax({
+            method: "POST",
+            url: '/ShoppingCarts/Add',
+            data: {
+                ProductCode: prodID,
+                Quantity: qty
+            },
+            success: (res) => {
+                location.reload();
+            }
+        });
+    });
+
 </script>
