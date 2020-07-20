@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ACME.Controllers
 {
-    public class ShoppingCartsController : Controller
+    public class ShoppingCartController : Controller
     {
         // POST: ShoppingCarts/Add
         [HttpPost]
@@ -66,7 +66,15 @@ namespace ACME.Controllers
             var user = context.Users.Where(u => u.Email == email).Include(u => u.ShoppingCart).First();
             ShoppingCart cart = user.ShoppingCart;
             var cartItems = context.ProductShoppingCarts.Where(psc => psc.ShoppingCart.ShoppingCartID == cart.ShoppingCartID).Include(psc => psc.Product).ToList();
+            cartItems.ForEach(ci => {
+                if(context.Stock.First(s => s.Product.ProductCode == ci.Product.ProductCode).Quantity <= 0)
+                {
+                    ci.Quantity = 0;
+                }
+            });
+            var stockCounts = cartItems.Select(ci => ci.Product.ProductCode).Select(pc => context.Stock.First(s => s.Product.ProductCode == pc)).Select(s => s.Quantity).ToList();
 
+            ViewBag.StockCounts = stockCounts;
             ViewBag.TotalItems = cartItems.Sum(c => c.Quantity);
             ViewBag.GrandTotal = cartItems.Sum(c => (c.Quantity * c.Product.Price));
             ViewBag.CartItems = cartItems;
@@ -76,19 +84,16 @@ namespace ACME.Controllers
 
         // POST: ShoppingCart/Edit/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public string Edit(int ProductCode, int Quantity)
         {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            ACMEDbContext context = new ACMEDbContext();
+            string email = HttpContext.Session.GetString("Email");
+            var user = context.Users.Where(u => u.Email == email).Include(u => u.ShoppingCart).First();
+            ShoppingCart cart = user.ShoppingCart;
+            ProductShoppingCart entry = context.ProductShoppingCarts.First(psc => psc.ShoppingCart.ShoppingCartID == cart.ShoppingCartID && psc.Product.ProductCode == ProductCode);
+            entry.Quantity = Quantity;
+            context.SaveChanges();
+            return "Ok";
         }
 
         // POST: ShoppingCart/Delete/5

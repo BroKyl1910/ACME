@@ -4,14 +4,16 @@ using ACME.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ACME.Migrations
 {
     [DbContext(typeof(ACMEDbContext))]
-    partial class ACMEDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200720133213_UpdateOrder")]
+    partial class UpdateOrder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,12 +49,7 @@ namespace ACME.Migrations
                     b.Property<string>("ShippingAddress")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserEmail")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("OrderID");
-
-                    b.HasIndex("UserEmail");
 
                     b.ToTable("Orders");
                 });
@@ -220,13 +217,6 @@ namespace ACME.Migrations
                     b.HasKey("UserTypeID");
 
                     b.ToTable("UserTypes");
-                });
-
-            modelBuilder.Entity("ACME.Models.Order", b =>
-                {
-                    b.HasOne("ACME.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserEmail");
                 });
 
             modelBuilder.Entity("ACME.Models.Product", b =>

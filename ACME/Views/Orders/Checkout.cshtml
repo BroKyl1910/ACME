@@ -1,0 +1,87 @@
+﻿
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<div class="body-content">
+
+
+    <div class="main-wrapper">
+        <div class="custom-card-header">
+            <h1 class="title">Checkout</h1>
+        </div>
+        <div class="dark-hr"></div>
+
+        <div class="checkout-body-wrapper">
+            <div class="checkout-form-wrapper">
+                <h3>Shipping Details</h3>
+                <div class="hr-dark"></div>
+                <form action="/user/register" method="post">
+                    <input id="address" type="text" placeholder="Street Address*" class="fluid-form-control rounded-textfield" required />
+                    <input id="complex" type="text" placeholder="Complex/Building (Optional)" class="fluid-form-control rounded-textfield" />
+                    <input id="suburb" type="text" placeholder="Suburb*" class="fluid-form-control rounded-textfield" required />
+                    <input id="city" type="text" placeholder="City/Town*" class="fluid-form-control rounded-textfield" required />
+                    <select id="province" class="fluid-form-control my-custom-select province-select" required>
+                        <option value="-1">Province*</option>
+                        @foreach (string p in ViewBag.Provinces)
+                        {
+                            <option value="@p">@p</option>
+                        }
+                    </select>
+                    <input id="post-code" type="text" placeholder="Post Code*" class="fluid-form-control rounded-textfield" required />
+
+                    <div class="checkout-error-text-wrapper">
+                        <span class="checkout-error-text"></span>
+                    </div>
+                </form>
+            </div>
+            <div class="checkout-total-block">
+                <h4>Total - @ViewBag.TotalItems Items</h4>
+                <div class="hr-dark"></div>
+                <div class="checkout-total-info">
+                    <span>Item total: R @string.Format("{0:0.00}", (decimal)ViewBag.GrandTotal)</span>
+                    <button id="complete-order-button" class="form-button complete-order-button">Confirm Order</button>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+
+<script>
+    $('#complete-order-button').click(() => {
+
+        var address = $('#address').val();
+        var complex = $('#complex').val();
+        var suburb = $('#suburb').val();
+        var city = $('#city').val();
+        var province = $('#province').val();
+        var postCode = $('#post-code').val();
+
+        if (address == null || suburb == null || city == null || province == -1 || postCode == null) {
+            $('.checkout-error-text').text('Please fill in all required fields');
+            return;
+        }
+        $('.checkout-error-text').text('');
+
+        $.ajax({
+            method: 'POST',
+            url: '/Orders/Checkout',
+            data: {
+                StreetAddress: address,
+                Complex: complex,
+                Suburb: suburb,
+                City: city,
+                Province: province,
+                PostCode: postCode
+            },
+            success: () => {
+                location.replace('/Orders');
+            }
+        });
+    });
+</script>
+
+
