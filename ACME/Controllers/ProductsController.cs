@@ -143,6 +143,7 @@ namespace ACME.Controllers
             product.Description = Description;
             product.Price = Convert.ToDouble(Price.Replace('.', ','));
             product.Category = context.Categories.ToList().First(c => c.CategoryID == CategoryID);
+            product.Active = true;
 
             //If image is null, means value of file select wasnt changed
             if (ProductImage != null)

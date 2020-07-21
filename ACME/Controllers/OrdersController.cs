@@ -13,6 +13,23 @@ namespace ACME.Controllers
     {
         public ActionResult Index()
         {
+            ACMEDbContext context = new ACMEDbContext();
+            string email = HttpContext.Session.GetString("Email");
+            var user = context.Users.Where(u => u.Email == email).Include(u => u.ShoppingCart).First();
+            var orders = context.Orders.Where(o => o.User == user).OrderByDescending(o => o.OrderDate).ToList();
+            //var productOrders1 = orders.Select(o => context.ProductOrders.Where(po => po.Order == o)).ToList();
+            List<ProductOrder> productOrders = new List<ProductOrder>();
+            orders.ForEach(o =>
+            {
+                foreach(ProductOrder po in context.ProductOrders.Where(p => p.Order == o).Include(p => p.Product))
+                {
+                    productOrders.Add(po);
+                }
+            });
+
+            ViewBag.Name = user.Name+" "+user.Surname;
+            ViewBag.Orders = orders;
+            ViewBag.ProductOrders = productOrders;
             return View();
         }
 
@@ -52,9 +69,10 @@ namespace ACME.Controllers
 
             string shippingAddress = StreetAddress + ", " + ((Complex != null) ? (Complex + ", ") : "") + Suburb + ", " + City + ", " + Province + ", " + PostCode;
             Order order = new Order();
+            order.OrderDate = DateTime.Now.Date;
             order.ETA = DateTime.Now.AddDays(2).Date;
             order.ShippingAddress = shippingAddress;
-            order.User = user;
+            order.User = user;  
             context.Orders.Add(order);
 
             await context.SaveChangesAsync();

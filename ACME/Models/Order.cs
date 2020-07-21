@@ -10,6 +10,7 @@ namespace ACME.Models
         public int OrderID { get; set; }
         public User User { get; set; }
         public string ShippingAddress { get; set; }
+        public DateTime OrderDate { get; set; }
         public DateTime ETA { get; set; }
     }
 }

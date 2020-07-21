@@ -541,6 +541,9 @@ span.material-icons.scroll-icon {
 .card-img {
     max-height: 100%;
     object-fit: contain;
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
+    width: auto;
 }
 
 .custom-card-title {
@@ -1165,12 +1168,17 @@ form {
     border: 1px solid rgba(0,0,0,0.2);
     box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
     padding: 10px;
+    margin-bottom: 15px;
 }
 
 .order-header{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+}
+
+.order-header h4{
+    margin: 0;
 }
 
 .material-icons.order-icon.tick-icon, .material-icons.order-icon.tick-icon:hover{
@@ -1183,6 +1191,10 @@ form {
     cursor: default;
     color: gray;
     font-size: 2.0em;
+}
+
+.order-status{
+    color: rgba(0,0,0,0.6);
 }
 
 .order-images-wrapper {
@@ -1200,12 +1212,18 @@ form {
     flex-shrink:0;
     padding: 5px;
     margin-right: 5px;
-    border: 1px solid rgba(0,0,0,0.2);
 }
 
-.order-image{
+.order-image {
     max-height: 100%;
     max-width: 100%;
     display: block;
     margin: 0 auto;
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
+}
+
+.order-image:hover {
+    cursor: pointer;
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.8);
 }
