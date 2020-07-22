@@ -1,0 +1,113 @@
+﻿
+@{
+    ViewData["Title"] = "Orders";
+}
+
+<div class="body-content">
+
+    <div class="main-wrapper">
+        <div class="custom-card-header">
+            <h1 class="title">Orders</h1>
+            <select id="month-select" class="search-category-combobox form-input">
+                @foreach (string month in ViewBag.Months)
+                {
+                    <option value="@month.Replace(' ', '#')">@month</option>
+                }
+            </select>
+        </div>
+        <div class="dark-hr"></div>
+
+        <div class="order-list-wrapper">
+            @if (ViewBag.HasOrders == true)
+            {
+                <div class="orders-graph">
+                </div>
+                <script src="~/js/ordersGraph.js"></script>
+            }
+            else
+            {
+                <div class="col-md-6 col-sm-6">
+                    <div class="test-container empty">
+                        <h2 class="test-heading no-tests">No Orders</h2>
+                    </div>
+                </div>
+            }
+        </div>
+
+
+
+    </div>
+
+</div>
+
+<script>
+    onload = () => {
+        drawGraph();
+    }
+
+    $('#month-select').on('change', () => {
+        drawGraph();
+    });
+
+    function drawGraph() {
+        var value = $('#month-select').val();
+        var month = value.split('#')[0];
+        var year = value.split('#')[1];
+        $.ajax({
+            method: "get",
+            url: "/Orders/MonthlyOrders",
+            data: {
+                Month: month,
+                Year: year
+            },
+            async: false,
+            success: (data) => {
+                data = JSON.parse(data);
+                console.log(data);
+
+                var xTickValues = data.xCategories.slice();
+                var yTickValues = data.yOrders.slice();
+
+                data.yOrders.unshift('Orders');
+                data.xCategories.unshift('x');
+
+                var chart = c3.generate({
+                    bindto: '.orders-graph',
+                    padding: {
+                        top: 30,
+                        right: 30,
+                        bottom: 30,
+                        left: 30,
+                    },
+                    data: {
+                        x: 'x',
+                        columns: [
+                            data.yOrders,
+                            data.xCategories
+                        ],
+                        type: 'bar',
+                    },
+                    bar: {
+                        width: 15
+                    },
+                    axis: {
+                        x: {
+                            type: 'category',
+                            categories: xTickValues,
+                            tick: {
+                                rotate: 90
+                            }
+                        },
+                        y: {
+                            tick: {
+                                values: yTickValues
+                            }
+                        }
+                    }
+                });
+
+                $('.orders-graph').css("display", "block");
+            }
+        });
+    }
+</script>

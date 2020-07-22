@@ -55,7 +55,7 @@ namespace ACME.Controllers
             }
             ViewBag.Categories = context.Categories.OrderBy(c => c.Name).ToList();
             ViewBag.SelectedCategory = selectedCategory;
-            return View(productsCategoryFiltered.ToList());
+            return View(productsCategoryFiltered.OrderBy(p=>p.Name).ToList());
         }
 
         // GET: ProductsController/Details/5
@@ -112,6 +112,16 @@ namespace ACME.Controllers
 
             context.Add(product);
             await context.SaveChangesAsync();
+
+            Stock stock = new Stock
+            {
+                Product = product,
+                Quantity = 5
+            };
+
+            context.Stock.Add(stock);
+            await context.SaveChangesAsync();
+
             return "OK";
 
         }

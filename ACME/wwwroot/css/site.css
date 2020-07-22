@@ -544,6 +544,8 @@ span.material-icons.scroll-icon {
     border-radius: 5px;
     box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
     width: auto;
+    max-width: 100%;
+    padding: 5px;
 }
 
 .custom-card-title {
@@ -1206,12 +1208,13 @@ form {
 }
 
 
-.order-image-container{
+.order-image-container {
     height: 150px;
     width: 150px;
-    flex-shrink:0;
+    flex-shrink: 0;
     padding: 5px;
     margin-right: 5px;
+    display: flex;
 }
 
 .order-image {
@@ -1221,9 +1224,18 @@ form {
     margin: 0 auto;
     border-radius: 5px;
     box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
+    padding: 5px;
+    object-fit: contain;
 }
 
 .order-image:hover {
     cursor: pointer;
     box-shadow: 5px 5px 5px rgba(0,0,0,0.8);
+}
+
+.orders-graph {
+    display: none;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.75);
 }

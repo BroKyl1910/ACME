@@ -150,7 +150,7 @@
 
     $('.custom-card.product-card').on('click', (evt) => {
         var id = $(evt.currentTarget).attr('data-id');
-        window.location.replace('/Products/Details/' + id);
+        window.location.href = '/Products/Details/' + id;
     });
 
     var idToDelete = null;
