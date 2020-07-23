@@ -45,6 +45,9 @@
                             <input type="number" class="quantity-input form-input" id="qty" value="1" min="1" max="@ViewBag.Stock" />
                         </div>
                         <button id="add-to-cart-button" class="form-button add-to-cart-button">Add to cart</button>
+                        <div class="added-to-cart-message">
+                            <span>Item has been added to your cart, <a href="/ShoppingCart/Details">check it out</a></span>
+                        </div>
                     }
 
                 }
@@ -94,6 +97,7 @@
     });
 
     $('#add-to-cart-button').click(() => {
+        $('.added-to-cart-message').hide();
         var prodID = $('#prod-id').val();
         var qty = $('#qty').val();
         $.ajax({
@@ -104,7 +108,7 @@
                 Quantity: qty
             },
             success: (res) => {
-                location.reload();
+                $('.added-to-cart-message').show();
             }
         });
     });

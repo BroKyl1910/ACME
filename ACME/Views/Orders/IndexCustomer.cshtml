@@ -11,52 +11,63 @@
         </div>
         <div class="dark-hr"></div>
 
-        <div class="order-list-wrapper">
-            @foreach (Order order in ViewBag.Orders)
-            {
-                int status; //0 = in progress, 1 = complete
-                string statusString;
-                if (order.ETA.Date.CompareTo(DateTime.Now.Date) <= 0)
-                {
-                    status = 1;
-                    statusString = "Delivered";
-                }
-                else
-                {
-                    status = 0;
-                    statusString = "In Progress";
-                }
-                <div class="order-wrapper">
-                    <div class="order-header">
-                        <h4>@statusString - @order.ETA.Date.ToLongDateString()</h4>
-                        @if (status == 0)
-                        {
-                            <span class="material-icons clock-icon order-icon">
-                                access_time
-                            </span>
-                        }
-                        else
-                        {
-                            <span class="material-icons tick-icon order-icon">
-                                done
-                            </span>
-                        }
-                    </div>
-                    <span class="order-status">Placed by @ViewBag.Name</span> <br />
-                    <span class="order-status">On @order.OrderDate.Date.ToLongDateString()</span>
-                    <div class="hr-dark"></div>
-                    <div class="order-images-wrapper">
-                        @foreach (ProductOrder po in ((List<ProductOrder>)ViewBag.ProductOrders).Where(po => po.Order == order))
-                        {
-                            <div class="order-image-container">
-                                <img class="order-image" src="data:image/jpeg;base64,@Convert.ToBase64String(po.Product.Image)" alt="" title="@po.Product.Name" onclick="window.location.href = '/Products/Details/@po.Product.ProductCode'"/>
-                            </div>
-                        }
-                    </div>
-                </div>
-            }
-        </div>
+        @if (ViewBag.Orders.Count > 0)
+        {
 
+
+            <div class="order-list-wrapper">
+                @foreach (Order order in ViewBag.Orders)
+                {
+                    int status; //0 = in progress, 1 = complete
+                    string statusString;
+                    if (order.ETA.Date.CompareTo(DateTime.Now.Date) <= 0)
+                    {
+                        status = 1;
+                        statusString = "Delivered";
+                    }
+                    else
+                    {
+                        status = 0;
+                        statusString = "In Progress";
+                    }
+                    <div class="order-wrapper">
+                        <div class="order-header">
+                            <h4>@statusString - @order.ETA.Date.ToLongDateString()</h4>
+                            @if (status == 0)
+                            {
+                                <span class="material-icons clock-icon order-icon">
+                                    access_time
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="material-icons tick-icon order-icon">
+                                    done
+                                </span>
+                            }
+                        </div>
+                        <span class="order-status">Placed by @ViewBag.Name</span> <br />
+                        <span class="order-status">On @order.OrderDate.Date.ToLongDateString()</span>
+                        <div class="hr-dark"></div>
+                        <div class="order-images-wrapper">
+                            @foreach (ProductOrder po in ((List<ProductOrder>)ViewBag.ProductOrders).Where(po => po.Order == order))
+                            {
+                                <div class="order-image-container">
+                                    <img class="order-image" src="data:image/jpeg;base64,@Convert.ToBase64String(po.Product.Image)" alt="" title="@po.Product.Name" onclick="window.location.href = '/Products/Details/@po.Product.ProductCode'" />
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+
+        }
+        else
+        {
+            <div class="no-products-text">
+                We haven't received any orders from you
+            </div>
+        }
 
 
     </div>

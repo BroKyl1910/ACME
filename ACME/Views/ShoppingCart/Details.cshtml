@@ -12,73 +12,82 @@
         </div>
         <div class="dark-hr"></div>
 
-        <div class="cart-body-wrapper">
-            <div class="cart-item-wrapper">
-                @{
-                    int i = 0;
-                }
-                @foreach (ProductShoppingCart cartItem in ViewBag.CartItems)
-                {
+        @if (ViewBag.CartItems.Count > 0)
+        {
 
-                    int stockCount = ((List<int>)ViewBag.StockCounts)[i];
 
-                    <div class="cart-item">
-                        <div class="cart-item-info-block">
-                            <div class="cart-item-image-wrapper">
-                                <img class="cart-item-image" src="data:image/jpeg;base64,@Convert.ToBase64String(cartItem.Product.Image)" />
-                            </div>
-                            <div class="cart-item-info-wrapper">
-                                <div class="cart-item-header">
-                                    <h4><a href="/Products/Details/@cartItem.Product.ProductCode" class="cart-item-link">@cartItem.Product.Name</a></h4>
-                                    <h4>R @string.Format("{0:0.00}", (decimal)@cartItem.Product.Price)</h4>
+            <div class="cart-body-wrapper">
+                <div class="cart-item-wrapper">
+                    @{
+                        int i = 0;
+                    }
+                    @foreach (ProductShoppingCart cartItem in ViewBag.CartItems)
+                    {
+
+                        int stockCount = ((List<int>)ViewBag.StockCounts)[i];
+
+                        <div class="cart-item">
+                            <div class="cart-item-info-block">
+                                <div class="cart-item-image-wrapper">
+                                    <img class="cart-item-image" src="data:image/jpeg;base64,@Convert.ToBase64String(cartItem.Product.Image)" />
                                 </div>
-                                <div class="hr-dark"></div>
+                                <div class="cart-item-info-wrapper">
+                                    <div class="cart-item-header">
+                                        <h4><a href="/Products/Details/@cartItem.Product.ProductCode" class="cart-item-link">@cartItem.Product.Name</a></h4>
+                                        <h4>R @string.Format("{0:0.00}", (decimal)@cartItem.Product.Price)</h4>
+                                    </div>
+                                    <div class="hr-dark"></div>
 
-                                @if (stockCount > 0)
-                                {
-                                    if (cartItem.Quantity > stockCount)
+                                    @if (stockCount > 0)
                                     {
-                                        <div class="cart-quantity-wrapper">
-                                            <label class="cart-quantity-label">Quantity:</label>
-                                            <input type="number" data-id="@cartItem.Product.ProductCode" class="cart-quantity-input" value="@stockCount" min="1" max="@stockCount" />
-                                        </div>
-                                        <span class="not-enough-stock-text">We know that you wanted @cartItem.Quantity of these, but unfortunately we only have @stockCount in stock</span>
+                                        if (cartItem.Quantity > stockCount)
+                                        {
+                                            <div class="cart-quantity-wrapper">
+                                                <label class="cart-quantity-label">Quantity:</label>
+                                                <input type="number" data-id="@cartItem.Product.ProductCode" class="cart-quantity-input" value="@stockCount" min="1" max="@stockCount" />
+                                            </div>
+                                            <span class="not-enough-stock-text">We know that you wanted @cartItem.Quantity of these, but unfortunately we only have @stockCount in stock</span>
+                                        }
+                                        else
+                                        {
+                                            <div class="cart-quantity-wrapper">
+                                                <label class="cart-quantity-label">Quantity:</label>
+                                                <input type="number" data-id="@cartItem.Product.ProductCode" class="cart-quantity-input" value="@cartItem.Quantity" min="1" max="@stockCount" />
+                                            </div>
+
+                                        }
                                     }
                                     else
                                     {
-                                        <div class="cart-quantity-wrapper">
-                                            <label class="cart-quantity-label">Quantity:</label>
-                                            <input type="number" data-id="@cartItem.Product.ProductCode" class="cart-quantity-input" value="@cartItem.Quantity" min="1" max="@stockCount" />
+                                        <div class="cart-out-of-stock-wrapper">
+                                            <span class="cart-out-of-stock">We are sorry to inform you that we are out of stock of this item</span>
                                         </div>
-
                                     }
-                                }
-                                else
-                                {
-                                    <div class="cart-out-of-stock-wrapper">
-                                        <span class="cart-out-of-stock">We are sorry to inform you that we are out of stock of this item</span>
-                                    </div>
-                                }
 
-                                <div>
-                                    <span class="remove-text" data-id="@cartItem.Product.ProductCode">Remove from cart</span>
+                                    <div>
+                                        <span class="remove-text" data-id="@cartItem.Product.ProductCode">Remove from cart</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        i++;
+                    }
+                </div>
+                <div class="cart-total-block">
+                    <h4>Total - @ViewBag.TotalItems Items</h4>
+                    <div class="hr-dark"></div>
+                    <div class="cart-total-info">
+                        <span>Item total: R @string.Format("{0:0.00}", (decimal)ViewBag.GrandTotal)</span>
+                        <button id="complete-order-button" class="form-button complete-order-button">Checkout</button>
                     </div>
-                    i++;
-                }
-            </div>
-            <div class="cart-total-block">
-                <h4>Total - @ViewBag.TotalItems Items</h4>
-                <div class="hr-dark"></div>
-                <div class="cart-total-info">
-                    <span>Item total: R @string.Format("{0:0.00}", (decimal)ViewBag.GrandTotal)</span>
-                    <button id="complete-order-button" class="form-button complete-order-button">Checkout</button>
                 </div>
             </div>
-        </div>
 
+        }
+        else
+        {
+            <div class="no-products-text">Your shopping cart is empty</div>
+        }
 
     </div>
 
