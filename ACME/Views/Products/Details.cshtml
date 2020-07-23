@@ -11,7 +11,7 @@
                 <img class="product-image" src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Image)" />
             </div>
             <div class="product-info-wrapper">
-                <h2>@Model.Name</h2>
+                <h3>@Model.Name</h3>
                 <div class="hr-dark"></div>
                 <p>
                     @Model.Description
@@ -20,7 +20,7 @@
             </div>
         </div>
         <div class="details-body-cart-block">
-            <h2>R @string.Format("{0:0.00}", (decimal)Model.Price)</h2>
+            <h3>R @string.Format("{0:0.00}", (decimal)Model.Price)</h3>
             <div class="hr-dark"></div>
             <input type="hidden" id="stock" value="@ViewBag.Stock" />
             <input type="hidden" id="prod-id" value="@Model.ProductCode" />

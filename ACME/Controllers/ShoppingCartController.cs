@@ -63,6 +63,11 @@ namespace ACME.Controllers
         {
             ACMEDbContext context = new ACMEDbContext();
             string email = HttpContext.Session.GetString("Email");
+            if(email == null)
+            {
+                return RedirectToAction("Login", "Users");
+            }
+
             var user = context.Users.Where(u => u.Email == email).Include(u => u.ShoppingCart).First();
             ShoppingCart cart = user.ShoppingCart;
             var cartItems = context.ProductShoppingCarts.Where(psc => psc.ShoppingCart.ShoppingCartID == cart.ShoppingCartID).Include(psc => psc.Product).ToList();

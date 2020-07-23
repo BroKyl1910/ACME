@@ -18,6 +18,10 @@ namespace ACME.Controllers
         {
             ACMEDbContext context = new ACMEDbContext();
             string email = HttpContext.Session.GetString("Email");
+            if (email == null)
+            {
+                return RedirectToAction("Login", "Users");
+            }
             var user = context.Users.Where(u => u.Email == email).Include(u => u.UserType).First();
             if (user.UserType.UserTypeID == 1)
             {
