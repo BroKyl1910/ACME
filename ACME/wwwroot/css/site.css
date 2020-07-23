@@ -1021,6 +1021,10 @@ form {
     justify-content: space-between;
 }
 
+.cart-item-header .cart-item-price {
+    flex-shrink: 0;
+}
+
 .cart-item-link {
     color: black;
     text-decoration: none;
